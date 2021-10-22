@@ -51,7 +51,7 @@ defmodule Holiday do
           }
 
           if acc > sing(DateTime.diff(dt1, now) / 86400, unit) do
-            acc = sing(DateTime.diff(dt1, now) / 86400, unit)
+            sing(DateTime.diff(dt1, now) / 86400, unit)
           else
             acc
           end
@@ -75,7 +75,7 @@ defmodule Holiday do
           }
 
           if acc > sing(DateTime.diff(dt1, now) / 3600, unit) do
-            acc = sing(DateTime.diff(dt1, now) / 3600, unit)
+            sing(DateTime.diff(dt1, now) / 3600, unit)
           else
             acc
           end
@@ -99,7 +99,7 @@ defmodule Holiday do
           }
 
           if acc > sing(DateTime.diff(dt1, now) / 60, unit) do
-            acc = sing(DateTime.diff(dt1, now) / 60, unit)
+            sing(DateTime.diff(dt1, now) / 60, unit)
           else
             acc
           end
@@ -123,7 +123,7 @@ defmodule Holiday do
           }
 
           if acc > sing(DateTime.diff(dt1, now), unit) do
-            acc = sing(DateTime.diff(dt1, now), unit)
+            sing(DateTime.diff(dt1, now), unit)
           else
             acc
           end
@@ -135,5 +135,5 @@ defmodule Holiday do
   def sing(result, unit) when result < 0 and unit == "minute", do: 525_600 - result
   def sing(result, unit) when result < 0 and unit == "hour", do: 8760 - result
   def sing(result, unit) when result < 0 and unit == "day", do: 365 - result
-  def sing(result, unit) when result >= 0, do: result
+  def sing(result, _) when result >= 0, do: result
 end
