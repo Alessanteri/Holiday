@@ -1,10 +1,9 @@
 defmodule Mix.Tasks.Holiday do
   use Mix.Task
 
-  @shortdoc "Simply calls the Hello.say/0 function."
+  @shortdoc "The function checks today for a holiday"
   def run(_) do
-    # calling our Hello.say() function from earlier
-    if Holiday.is_holiday(Holiday.init_db()) do
+    if Holiday.is_holiday() do
       IO.puts("yes")
     else
       IO.puts("no")

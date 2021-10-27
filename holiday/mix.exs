@@ -14,7 +14,8 @@ defmodule Holiday.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger],
+      mod: {Holiday.Application, []}
     ]
   end
 
@@ -25,7 +26,9 @@ defmodule Holiday.MixProject do
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
       {:cowboy, "~> 1.0", only: [:dev, :test]},
       {:slime, "~> 0.14"},
-      {:icalendar, "~> 1.1.0"}
+      {:icalendar, "~> 1.1.0"},
+      {:ecto_sql, "~> 3.2"},
+      {:postgrex, "~> 0.15"}
     ]
   end
 end
