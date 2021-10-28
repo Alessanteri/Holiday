@@ -66,8 +66,6 @@ defmodule Holiday do
         time_zone: "America/Manaus"
       }
 
-      IO.puts(abs(DateTime.diff(dt1, now)) / 86400)
-
       min(acc, abs(DateTime.diff(dt1, now)))
     end)
   end
