@@ -90,59 +90,30 @@ defmodule Holiday do
   The function of calculating the time until the next holiday
   """
   @spec time_until_holiday(%DateTime{}, String) :: Float
-  def(time_until_holiday(now \\ DateTime.utc_now(), unit)) do
-    db = Holiday.Feast.get_data()
+  def time_until_holiday(now \\ DateTime.utc_now(), _unit)
 
-    case unit do
-      "day" ->
-        Enum.reduce(db, 100_000_000_000_000_000, fn x, acc ->
-          %{dtstart: dtstart} = x
-          dt1 = DateTime.new!(dtstart, ~T[00:00:00], "Etc/UTC")
+  def time_until_holiday(now, "day") do
+    calculete_time_to_holiday(Holiday.Feast.get_data(), now) / 86400
+  end
 
-          if acc > DateTime.diff(dt1, now) / 86400 do
-            DateTime.diff(dt1, now) / 86400
-          else
-            acc
-          end
-        end)
+  def time_until_holiday(now, "hour") do
+    calculete_time_to_holiday(Holiday.Feast.get_data(), now) / 3600
+  end
 
-      "hour" ->
-        Enum.reduce(db, 100_000_000_000_000_000, fn x, acc ->
-          %{dtstart: dtstart} = x
-          dt1 = DateTime.new!(dtstart, ~T[00:00:00], "Etc/UTC")
+  def time_until_holiday(now, "minute") do
+    calculete_time_to_holiday(Holiday.Feast.get_data(), now) / 60
+  end
 
-          if acc > DateTime.diff(dt1, now) / 3600 do
-            DateTime.diff(dt1, now) / 3600
-          else
-            acc
-          end
-        end)
+  def time_until_holiday(now, "second") do
+    calculete_time_to_holiday(Holiday.Feast.get_data(), now)
+  end
 
-      "minute" ->
-        Enum.reduce(db, 100_000_000_000_000_000, fn x, acc ->
-          %{dtstart: dtstart} = x
+  def calculete_time_to_holiday(db, now) do
+    Enum.reduce(db, 100_000_000_000, fn x, acc ->
+      %{dtstart: dtstart} = x
+      dt1 = DateTime.new!(dtstart, ~T[00:00:00], "Etc/UTC")
 
-          dt1 = DateTime.new!(dtstart, ~T[00:00:00], "Etc/UTC")
-
-          if acc > DateTime.diff(dt1, now) / 60 do
-            DateTime.diff(dt1, now) / 60
-          else
-            acc
-          end
-        end)
-
-      "second" ->
-        Enum.reduce(db, 100_000_000_000_000_000, fn x, acc ->
-          %{dtstart: dtstart} = x
-
-          dt1 = DateTime.new!(dtstart, ~T[00:00:00], "Etc/UTC")
-
-          if acc > DateTime.diff(dt1, now) do
-            DateTime.diff(dt1, now)
-          else
-            acc
-          end
-        end)
-    end
+      min(acc, DateTime.diff(dt1, now))
+    end)
   end
 end
