@@ -1,8 +1,7 @@
 defmodule HolidayTest do
   use ExUnit.Case
-  doctest Holiday
 
-  test "aa" do
+  test "check for empty database" do
     assert Holiday.init_db() != nil
   end
 
@@ -28,6 +27,6 @@ defmodule HolidayTest do
       time_zone: "America/Manaus"
     }
 
-    assert Holiday.time_until_holiday(Holiday.init_db(), dt, "day") == 26
+    assert Holiday.time_until_holiday(Holiday.init_db(), dt, "day") == 15
   end
 end

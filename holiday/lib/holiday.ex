@@ -31,109 +31,44 @@ defmodule Holiday do
   The function of calculating the time until the next holiday
   """
   @spec time_until_holiday(%ICalendar{}, %DateTime{}, String) :: Float
-  def(time_until_holiday(db, now \\ DateTime.utc_now(), unit)) do
-    case unit do
-      "day" ->
-        Enum.reduce(db, 100_000_000_000_000_000, fn x, acc ->
-          %{dtstart: dtstart} = x
+  def time_until_holiday(db, now \\ DateTime.utc_now(), _unit)
 
-          dt1 = %DateTime{
-            year: now.year,
-            month: dtstart.month,
-            day: dtstart.day,
-            zone_abbr: "AMT",
-            hour: dtstart.hour,
-            minute: dtstart.minute,
-            second: dtstart.second,
-            utc_offset: -14400,
-            std_offset: 0,
-            time_zone: "America/Manaus"
-          }
-
-          if acc > sing(DateTime.diff(dt1, now) / 86400, unit) do
-            sing(DateTime.diff(dt1, now) / 86400, unit)
-          else
-            acc
-          end
-        end)
-
-      "hour" ->
-        Enum.reduce(db, 100_000_000_000_000_000, fn x, acc ->
-          %{dtstart: dtstart} = x
-
-          dt1 = %DateTime{
-            year: now.year,
-            month: dtstart.month,
-            day: dtstart.day,
-            zone_abbr: "AMT",
-            hour: dtstart.hour,
-            minute: dtstart.minute,
-            second: dtstart.second,
-            utc_offset: -14400,
-            std_offset: 0,
-            time_zone: "America/Manaus"
-          }
-
-          if acc > sing(DateTime.diff(dt1, now) / 3600, unit) do
-            sing(DateTime.diff(dt1, now) / 3600, unit)
-          else
-            acc
-          end
-        end)
-
-      "minute" ->
-        Enum.reduce(db, 100_000_000_000_000_000, fn x, acc ->
-          %{dtstart: dtstart} = x
-
-          dt1 = %DateTime{
-            year: now.year,
-            month: dtstart.month,
-            day: dtstart.day,
-            zone_abbr: "AMT",
-            hour: dtstart.hour,
-            minute: dtstart.minute,
-            second: dtstart.second,
-            utc_offset: -14400,
-            std_offset: 0,
-            time_zone: "America/Manaus"
-          }
-
-          if acc > sing(DateTime.diff(dt1, now) / 60, unit) do
-            sing(DateTime.diff(dt1, now) / 60, unit)
-          else
-            acc
-          end
-        end)
-
-      "second" ->
-        Enum.reduce(db, 100_000_000_000_000_000, fn x, acc ->
-          %{dtstart: dtstart} = x
-
-          dt1 = %DateTime{
-            year: now.year,
-            month: dtstart.month,
-            day: dtstart.day,
-            zone_abbr: "AMT",
-            hour: dtstart.hour,
-            minute: dtstart.minute,
-            second: dtstart.second,
-            utc_offset: -14400,
-            std_offset: 0,
-            time_zone: "America/Manaus"
-          }
-
-          if acc > sing(DateTime.diff(dt1, now), unit) do
-            sing(DateTime.diff(dt1, now), unit)
-          else
-            acc
-          end
-        end)
-    end
+  def time_until_holiday(db, now, "day") do
+    calculete_time_to_holiday(db, now) / 86400
   end
 
-  def sing(result, unit) when result < 0 and unit == "second", do: 31_536_000 - result
-  def sing(result, unit) when result < 0 and unit == "minute", do: 525_600 - result
-  def sing(result, unit) when result < 0 and unit == "hour", do: 8760 - result
-  def sing(result, unit) when result < 0 and unit == "day", do: 365 - result
-  def sing(result, _) when result >= 0, do: result
+  def time_until_holiday(db, now, "hour") do
+    calculete_time_to_holiday(db, now) / 3600
+  end
+
+  def time_until_holiday(db, now, "minute") do
+    calculete_time_to_holiday(db, now) / 60
+  end
+
+  def time_until_holiday(db, now, "second") do
+    calculete_time_to_holiday(db, now)
+  end
+
+  defp calculete_time_to_holiday(db, now) do
+    Enum.reduce(db, 100_000_000_000, fn x, acc ->
+      %{dtstart: dtstart} = x
+
+      dt1 = %DateTime{
+        year: now.year,
+        month: dtstart.month,
+        day: dtstart.day,
+        zone_abbr: "AMT",
+        hour: dtstart.hour,
+        minute: dtstart.minute,
+        second: dtstart.second,
+        utc_offset: -14400,
+        std_offset: 0,
+        time_zone: "America/Manaus"
+      }
+
+      IO.puts(abs(DateTime.diff(dt1, now)) / 86400)
+
+      min(acc, abs(DateTime.diff(dt1, now)))
+    end)
+  end
 end
