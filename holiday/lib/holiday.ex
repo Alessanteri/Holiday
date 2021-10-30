@@ -50,7 +50,7 @@ defmodule Holiday do
   end
 
   defp calculete_time_to_holiday(db, now) do
-    Enum.reduce(db, 100_000_000_000, fn x, acc ->
+    Enum.map(db, fn x ->
       %{dtstart: dtstart} = x
 
       dt1 = %DateTime{
@@ -65,8 +65,8 @@ defmodule Holiday do
         std_offset: 0,
         time_zone: "America/Manaus"
       }
-
-      min(acc, abs(DateTime.diff(dt1, now)))
     end)
+    |> Enum.min_by(&abs(DateTime.diff(&1, now)))
+    |> DateTime.diff(now)
   end
 end
