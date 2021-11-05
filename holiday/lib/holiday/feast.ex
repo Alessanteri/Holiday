@@ -12,8 +12,6 @@ defmodule Holiday.Feast do
 
   def changeset(struct, params) do
     struct
-    # |> cast(params, [:name, :dtstart, :dtend])
-    # |> validate_required([:name, :dtstart, :dtend])
     |> set_struct_if_not_nil()
   end
 

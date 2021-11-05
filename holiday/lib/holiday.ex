@@ -53,9 +53,6 @@ defmodule Holiday do
   """
   @spec is_holiday(%Date{}) :: boolean
   def is_holiday(day \\ Date.utc_today()) do
-    # IO.puts(day)
-    # IO.puts(Holiday.Feast.get_data_for_today(day))
-
     if Holiday.Feast.get_data_for_today(day) == [] do
       false
     else
