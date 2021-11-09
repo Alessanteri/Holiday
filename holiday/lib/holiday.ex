@@ -1,4 +1,6 @@
 defmodule Holiday do
+  alias Holiday.{Repo, Feast}
+
   @doc """
   Holidays database initialization
   """
@@ -32,20 +34,13 @@ defmodule Holiday do
   end
 
   defp create_date(year, month, day) do
-    Date.new!(
-      year,
-      month,
-      day
-    )
+    Date.new!(year, month, day)
   end
 
   defp add_date_to_database(summary, start_date, end_date) do
-    %Holiday.Feast{
-      name: summary,
-      dtstart: start_date,
-      dtend: end_date
-    }
-    |> Holiday.Feast.save_data()
+    %Holiday.Feast{}
+    |> Holiday.Feast.changeset(%{name: summary, dtstart: start_date, dtend: end_date})
+    |> Repo.insert()
   end
 
   @doc """

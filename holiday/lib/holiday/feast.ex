@@ -10,9 +10,10 @@ defmodule Holiday.Feast do
     field(:dtend, :date, null: false)
   end
 
-  def changeset(struct, params) do
+  def changeset(struct, params \\ %{}) do
     struct
-    |> set_struct_if_not_nil()
+    |> cast(params, [:name, :dtstart, :dtend])
+    |> validate_required([:name, :dtstart, :dtend])
   end
 
   def set_struct_if_not_nil(struct) do
