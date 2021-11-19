@@ -1,5 +1,5 @@
 defmodule Holiday do
-  alias Holiday.{Repo, Feast}
+  alias Holiday.{Repo}
 
   @doc """
   Holidays database initialization

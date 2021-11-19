@@ -1,7 +1,7 @@
 defmodule Holiday.Feast do
   use Ecto.Schema
   import Ecto.Changeset
-  import Ecto.Query
+  import Ecto.Query, warn: false
   alias Holiday.{Repo, Feast}
 
   schema "holiday" do
@@ -14,20 +14,6 @@ defmodule Holiday.Feast do
     struct
     |> cast(params, [:name, :dtstart, :dtend])
     |> validate_required([:name, :dtstart, :dtend])
-  end
-
-  def set_struct_if_not_nil(struct) do
-    if is_nil(struct.name) or is_nil(struct.dtstart) or is_nil(struct.dtend) do
-      false
-    else
-      true
-    end
-  end
-
-  def save_data(struct) do
-    if changeset(struct, struct) do
-      Holiday.Repo.insert(struct)
-    end
   end
 
   def clear_database() do
